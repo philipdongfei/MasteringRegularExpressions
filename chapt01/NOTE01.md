@@ -89,6 +89,7 @@ Some versions of *egrep* support a metasequence for providing your own minimum a
 
 ### Parentheses and Backreferences
 
+I used a version of egrep that didn't supports both `\<...\>` and backreferencing.
 
 
 ### The Great Escape
