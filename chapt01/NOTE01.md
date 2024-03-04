@@ -96,6 +96,8 @@ I used a version of egrep that didn't supports both `\<...\>` and backreferencin
 
 ## Expanding the Foundation
 
+
+
 ### Linguistic Diversification
 
 ### The Goal of a Regular Expression
@@ -104,14 +106,37 @@ I used a version of egrep that didn't supports both `\<...\>` and backreferencin
 
 #### Variable names
 
+`[a-zA-Z_][a-zA-Z_0-9]*`
+`[a-zA-Z_][a-zA-Z_0-9]{0,31}`
+
 
 #### A string within double quotes
 
+A simple solution to matching a string within double quotes might be: 
+`"[^"]*"`
+
 #### Dollar amount (with optional cents)
+
+One approach to matching a dollar amount is: `\$[0-9]+(\.[0-9][0-9])?`
+But, if you need to find lines that contain just a price, and nothing else, you can wrap the expression with `^\$[0-9]+(\.[0-9][0-9])?$`
 
 #### An HTTP/HTML URL
 
+Putting these all together, we might use as our first attempt something like:
+    `% egrep -i '\<http://[-a-z0-9_.:]+/[-a-z0-9_:@&?=+,.!/~*%$]*\.html?\>' files` 
+
+Heck, I could probably get away with even something as simple as:
+    `% egrep -i '\<http://[^ ]*\.html?\>' files...`
+
 #### Time of day, such as "9:17am" or "12:30pm"
+
+12-hour time
+`(1[012]|[1-9]):[0-5][0-9] (am|pm)`
+
+24-hour time
+`(2[0-3]|1[0-9]|0?[0-9]):[0-5][0-9]`
+`(2[0-3]|[01]?[0-9]):[0-5][0-9]`
+`[01]?[4-9]|[012]?[0-3]`
 
 ### Regular Expression Nomenclature
 
@@ -132,6 +157,29 @@ I used a version of egrep that didn't supports both `\<...\>` and backreferencin
 ### Improving on the Status Quo
 
 ### Summary
+
+|           Items to Match a Single Character       |
+|    Metacharacter              Matches             | 
+|.      | dot   | Matches any one character         |
+|[...]  | character class | Matches any one character listed |
+|[^...] | negated character class | Matches any one character not listed |
+|\cbar  | escaped character | When cbar is a metacharacter, or the escaped combination is not otherwise special, matches the literal char |
+|  Items Appended to Provide "Counting": The Quantifiers |
+| ?    | question | One allowed, but it is optional |
+| *    | star     | Any number allowed, but all are optional |
+| +    | plus     | At least one required; additional are optional |
+| {min,max} | specified range | Min required, max allowed |
+|  Items That Match a Position  |
+| ^    | caret    | Matches the position at the start of the line |
+| $    | dollar   | Matches the position at the end of the line |
+| \\\<   | word boundary | Matches the position at the start of a word |
+| \\\>   | word boundary | Matches the position at the end of a word |
+|       Other    |
+| |    | alternation   | Matches either expression it separates |
+|(...) | parentheses   | Limits scope of alternation, provides grouping for the quantifiers, and "captures" for backreferences |
+|\1, \2,...| backrefernce | Matches text previously matched within first, second, etc., set of parentheses. |
+|    not supported by all versions of egrep |
+
 
 ## Personal Glimpses
 

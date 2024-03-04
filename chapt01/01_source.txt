@@ -19,4 +19,30 @@ ega.att.com
 www.sina.com
 (very)
 (parents)
+"nail the 2\"x4\" plank". We'll see this example serveral times in future
+it considers dollar amounts like $1000,
+but not $1,000.
+$100.990
+$100.90
+$99.111rpii
+ 99$.111
+99.111$
+One type of value our expression doesn't match is '$.49'.
+http://hostname/path.html
+www.yahoo.com
+http://www.yahoo.com
+http://www.yahoo.com/ab/ef1/c9.html
+the rules (www.yahoo.com)
+the rules www.yahoo.com are complex
+<TITLe>title
+hr<HR>
+this <I>short</I> example
+9:17 am
+12:30 pm
+19:17 am
+23:15
+15:33
+15:79
+
+
 
