@@ -2,13 +2,13 @@ print "Enter a temperature (e.g., 32F, 100C): \n";
 $input = <STDIN>; # This reads one line from the user.
 chomp($input);    # This removes the ending newline from $input.
 
-if ($input =~ m/^([-+]?[0-9]+(\.[0-9]*)?)[ \t]*([CF])$/)
+if ($input =~ m/^([-+]?[0-9]+(\.[0-9]*)?)\s*([CF])$/i)
 {
     # If we get in here, we had a match. $1 is the number, $2 is "C" or "F".
     $InputNum = $1;  # Save to named variables to make the ...
     $type     = $3;  # ...rest of the program easier to read.
 
-    if ($type eq "C") {    # 'eq' tests if two strings are equal
+    if ($type =~ m/c/i) {    # Is it "c" or "C"? 
         # The input was Celsius, so calculate Fahrenheit
         $celsius = $InputNum;
         $fahrenheit = ($celsius * 9 / 5) + 32;
