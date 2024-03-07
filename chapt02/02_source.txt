@@ -1,3 +1,10 @@
 In fact, all I wanted to do was change every occurrence of read to
 read. There were only a few such changes to make, but with the slow response,
+by Jeffrey Friedl.
+by Jeff Friedl.
+by Thomas Jefferson.
+by JeffJeffrey Friedl.
+by Jeffs Jeffrey Friedl.
+see Jeffs book
+
 
