@@ -69,9 +69,31 @@ Here's all I did to make all the changes I needed:
 
 #### Back to the comma exaple...
 
+`
+    $pop = 298444215;
+    $pop =~ s/(?<=\d)(?=(?:\d\d\d)+$)/,/g;
+    print "The US population is $pop\n";
+
+`
+
+indeed prints "The US population is 298,444,215" as we desire. It might, however, seem a bit odd that the parentheses surrounding `\d\d\d` are capturing parentheses. Here, we use them only for grouping, to apply the plus to the set of three digits, and so don't need their capture-to-$1 functionality.
+
+
+
 #### Word boundaries and negative lookaround
 
+For our comma problem, though, we really need only `(?!\d)` to cap our sets of three digits. We use that instead of `\d` or `$`, which leaves us with:
+`
+    $text =~ s/(?<=\d)(?=(\d\d\d)+(?!\d))/,/g;
+`
+
+This now works on text like "...tone of 12345Hz," which is good, but unfortunately it also matches the year in "... the 1970s ..." Actually, any of these match "... in 1970 ...," which is not good.
+
+
 #### Commafication without lookbehind
+
+` $text =~ s/(\d)(?=(\d\d\d)+(?!\d))/$1,/g; `
+` $text =~ s/(\d)((\d\d\d)+\d)/$1,/g; `
 
 ### Text-to-HTML Conversion
 
