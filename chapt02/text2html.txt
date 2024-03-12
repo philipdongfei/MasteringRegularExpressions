@@ -1,0 +1,7 @@
+This is a sample file.
+It has three lines.
+That's all
+
+Read "odd" news at http://dailynews.yahoo.com/h/od, and
+maybe some tech stuff at http://www.slashdot.com!
+

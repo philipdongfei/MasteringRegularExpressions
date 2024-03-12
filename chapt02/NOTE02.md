@@ -99,13 +99,53 @@ This now works on text like "...tone of 12345Hz," which is good, but unfortunate
 
 #### Cooking special characters
 
+`
+    $text =~ s/&/&amp;/g; # Make the basic HTML...
+    $text =~ s/</&lt;/g;    # ...character&,<,and>...
+    $text =~ s/>/&gt;/g;    # ...HTML safe.
+
+`
+
+It's important to convert & first, since all three have '&' in the replacement.
+
+
+
 #### Separating paragraphs
+
+Luckily, most regex-endowed languages give us an easy solution, and *enhanced line anchor* match mode in which the meaning of ^ and $ to change from *string* related to the *logical-line* related meaning we need for this example. With Perl, this mode is specified with the `/m` modifier:
+` $text =~ s/^&/<p>/mg;`
+
+we use ` $text =~ s/^\s*$/<p>/mg; `
 
 #### "Linkizing" an email address
 
+
+
 #### Matching the username and hostname
 
+So, we probably should use `[a-zA-Z0-9]`, or perhaps `[a-z0-9]` with the /i modifier (for a case-insensitive match). Hostnames can also have a dash as well, so we'll use `[-a-z0-9]`(again, being careful to put the dash first). This leaves us with `[-a-z0-9]+(\.[-a-z0-9]+)*\.(com|edu|info)` for the hostname part.
+
+That's why I'll now introduce the /x modifier, which allows us to rewrite that regex as:
+`
+$text =~ s{
+    \b
+    # Capture the address to $1...
+    (
+        username regex
+        \@
+        hostname regex
+    )
+    \b
+}{<a href="mailto:$1">$1</a>}gix;
+`
+The /x modifier appears at the end of that snippet (along with the /g and /i modifiers), and does two simple but powerful things for the regular expression. First, it causes most whitespace to be ignored, so you can "free-format" the expression for readability. Secondly, it allows comments with a leading \#.
+
 #### Putting it together
+
+` $text =~ s/^\s*$/<p>/mg;`
+
+All the regular expressions work with the same multiline string, but notice that only the expression to separate paragraphs requires the /m modifier, since only that expression has `^` or `$`. Using /m on the others wouldn't hurt (well, except to make the reader wonder why it was there).
+
 
 #### "Linkizing" an HTTP URL
 
