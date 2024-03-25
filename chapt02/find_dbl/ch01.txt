@@ -1,0 +1,7 @@
+Here's the scenario: you're given the job of checking the pages on a web server for doubled words (such as "this this"), a common problem with documents subject to heavy editing. Your job is to create a solution that will:
+  * Accept any number of files to check, report each line of each file that has doubled words, hightlight (using standard ANSI escape sequences) each doubled word, and ensure that the source filename appears with each line in the report.
+  * Work across lines, even finding situations where a word at the end of one line is repeated at the beginning of the next.
+  * Find doubled words despite capitalization differences, such as with 'The the...', as well as allow differing amounts of whitespace (spaces, tabs, new-lines, and the like) to lie between the words.
+  * Find doubled words even when separated by HTML tags. HTML tags are for marking up text on World Wide Web pages, for example, to make a word bold: '...it is <B>very</B> very important...'.
+
+
