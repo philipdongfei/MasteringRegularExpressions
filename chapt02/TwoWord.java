@@ -11,11 +11,12 @@ public class TwoWord
             Pattern.CASE_INSENSITIVE);
         String replace1 = "\033[7m$1\033[m$2\033[7m$3\033[m";
         Pattern regex2 = Pattern.compile("^(?:[^\\e]*\\n)+", Pattern.MULTILINE);
-        Pattern regex3 = Pattern.compile("&([^\\n]+)", Pattern.MULTILINE);
+        Pattern regex3 = Pattern.compile("^([^\\n]+)", Pattern.MULTILINE);
 
         // For each command-line argument....
         for (int i = 0; i < args.length; i++)
         {
+
             try {
                 BufferedReader in = new BufferedReader(new FileReader(args[i]));
                 String text;
@@ -23,9 +24,13 @@ public class TwoWord
                 // For each paragraph of each file.....
                 while ((text = getPara(in)) != null)
                 {
+                    
+                    //System.out.print("\n0:\n " + text);
                     // Apply the three substitutions
                     text = regex1.matcher(text).replaceAll(replace1);
+                    //System.out.print("\n1:\n " + text);
                     text = regex2.matcher(text).replaceAll("");
+                    //System.out.print("\n2:\n " + text);
                     text = regex3.matcher(text).replaceAll(args[i] + ": $1");
 
                     // Display results

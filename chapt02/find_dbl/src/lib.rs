@@ -61,9 +61,9 @@ fn find_files(paths: &[String]) -> Vec<MyResult<String>> {
 }
 
 
-fn find_para<T: BufRead>(
-    mut file: T,
-    filename: &str
+fn get_para<T: BufRead>(
+    file: &mut T
+    //filename: &str
 ) -> MyResult<String> {
     let mut line = String::new();
     let mut para = String::new();
@@ -80,7 +80,9 @@ fn find_para<T: BufRead>(
         }
         line.clear();
     }
-    let pattern1 = r"\b([a-z]+)((?:\s|<[^>]+>)+)((1)\b)".to_string();
+    Ok(para.to_string())
+    /*
+    let pattern1 = r"\b([a-z]+)((?:\s|<[^>]+>)+)($1\b)".to_string();
     //let pattern1 = "\\b([a-z]+)((?:\\s|<[^>]+\\>)+)($1\\b)".to_string();
     let regex1 = RegexBuilder::new(&pattern1)
         .case_insensitive(true)
@@ -89,7 +91,7 @@ fn find_para<T: BufRead>(
         //.map_err(|_| format!("Invalid pattern \"{}\"", &pattern1))?;
     //let replace1 = "\033[7m$1\033[m$2\033[7m$3\033[m".to_string();
     //let pattern2 = "^(?:[^[[:space:]]]*\\n)+".to_string();
-    let replace1 = r"\\e[7m$1\\e[m$2\\e[7m$3\\e[m".to_string();
+    let replace1 = r"\e[7m$1\e[m$2\e[7m$3\e[m".to_string();
     let pattern2 = r"^(?:[^[[:space:]]]*\n)+".to_string();
     let regex2 = RegexBuilder::new(&pattern2)
         .multi_line(true)
@@ -104,10 +106,14 @@ fn find_para<T: BufRead>(
         .unwrap();
         //.map_err(|_| format!("Invalid pattern \"{}\"", &pattern3))?;
     let r1 = regex1.replace_all(&para, replace1); 
+    println!("para: {}", para);
     let r2 = regex2.replace_all(&r1, "");
+    println!("r1: {}", r1);
     let replace3 = format!("{}: $1", filename);
     let results = regex3.replace_all(&r2, replace3);
+    println!("r2: {}", r2);
     Ok(results.to_string())
+    */
 }
 
 fn open(filename: &str) -> MyResult<Box<dyn BufRead>> {
@@ -126,7 +132,52 @@ pub fn run(config: Config) -> MyResult<()> {
             Err(e) => eprintln!("{}", e),
             Ok(filename) => match open(&filename) {
                 Err(e) => eprintln!("{}: {}", filename, e),
-                Ok(file) => {
+                Ok(mut file) => {
+                    loop {
+                        let txt = get_para(&mut file);
+                        match txt {
+                            Err(e) => eprintln!("{}", e),
+                            Ok(para) => {
+                                if para.is_empty(){
+                                    break;
+                                }
+                                // don't success
+                                let pattern1 = r"\b([a-z]+)((?:\s|<[^>]+>)+)($1\b)".to_string();
+                                //let pattern1 = r"\bFind\b".to_string();
+                                println!("pattern1: {}", &pattern1);
+                                let regex1 = RegexBuilder::new(&pattern1)
+                                    .case_insensitive(true)
+                                    .build()
+                                    .unwrap();
+                                let replace1 = r"\e[7m$1\e[m$2\e[7m$3\e[m".to_string();
+                                // syntax error "\e"
+                                let pattern2 = r"^(?:[^\e]*\n)+".to_string();
+                                println!("pattern2: {}", &pattern2);
+                                let regex2 = RegexBuilder::new(&pattern2)
+                                    .multi_line(true)
+                                    .build()
+                                    .unwrap();
+                                    //.map_err(|_| format!("Invalid pattern \"{}\"", &pattern2))?;
+                                let pattern3 = r"^([^\n]+)".to_string(); 
+                                let regex3 = RegexBuilder::new(&pattern3)
+                                    .multi_line(true)
+                                    .build()
+                                    .unwrap();
+                                    //.map_err(|_| format!("Invalid pattern \"{}\"", &pattern3))?;
+                                println!("pattern3: {}", &pattern3);
+                                if regex1.is_match(&para) {
+                                    let r1 = regex1.replace_all(&para, replace1); 
+                                    let r2 = regex2.replace_all(&r1, "");
+                                    let replace3 = format!("{}: $1", filename);
+                                    let results = regex3.replace_all(&r2, replace3);
+                                    println!("{}", results);
+                                } else {
+                                    println!("not match para: {}", &pattern1);
+                                }
+                            }
+                        }
+                    }
+                    /*
                     match find_para(
                         file,
                         &filename
@@ -136,6 +187,7 @@ pub fn run(config: Config) -> MyResult<()> {
                             println!("{}", matches);
                         }
                     }
+                    */
                 }
             },
         }
