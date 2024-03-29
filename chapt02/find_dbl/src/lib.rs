@@ -1,5 +1,7 @@
 use clap::{App, Arg};
-use regex::{Regex, RegexBuilder};
+//use regex::{Regex, RegexBuilder};
+use fancy_regex::Regex;
+//use lazy_regex::{RegexBuilder};
 use std::{
     error::Error,
     fs::{self, File},
@@ -142,38 +144,49 @@ pub fn run(config: Config) -> MyResult<()> {
                                     break;
                                 }
                                 // don't success
-                                let pattern1 = r"\b([a-z]+)((?:\s|<[^>]+>)+)($1\b)".to_string();
+                                let pattern1 = r"(?i)\b([a-z]+)((?:\s|<[^>]+>)+)(\1\b)".to_string();
                                 //let pattern1 = r"\bFind\b".to_string();
-                                println!("pattern1: {}", &pattern1);
+                                //println!("pattern1: {}", &pattern1);
+                                let regex1 = Regex::new(&pattern1).unwrap();
+                                /*
                                 let regex1 = RegexBuilder::new(&pattern1)
                                     .case_insensitive(true)
                                     .build()
                                     .unwrap();
+                                */
                                 let replace1 = r"\e[7m$1\e[m$2\e[7m$3\e[m".to_string();
                                 // syntax error "\e"
-                                let pattern2 = r"^(?:[^\e]*\n)+".to_string();
-                                println!("pattern2: {}", &pattern2);
+                                let pattern2 = r"(?m)^(?:[^\e]*\n)+".to_string();
+                                let regex2 = Regex::new(&pattern2).unwrap();
+                                //println!("pattern2: {}", &pattern2);
+                                /*
                                 let regex2 = RegexBuilder::new(&pattern2)
                                     .multi_line(true)
                                     .build()
                                     .unwrap();
                                     //.map_err(|_| format!("Invalid pattern \"{}\"", &pattern2))?;
-                                let pattern3 = r"^([^\n]+)".to_string(); 
+                                */
+                                let pattern3 = r"(?m)^([^\n]+)".to_string(); 
+                                let regex3 = Regex::new(&pattern3).unwrap();
+                                /*
                                 let regex3 = RegexBuilder::new(&pattern3)
                                     .multi_line(true)
                                     .build()
                                     .unwrap();
                                     //.map_err(|_| format!("Invalid pattern \"{}\"", &pattern3))?;
-                                println!("pattern3: {}", &pattern3);
-                                if regex1.is_match(&para) {
-                                    let r1 = regex1.replace_all(&para, replace1); 
-                                    let r2 = regex2.replace_all(&r1, "");
-                                    let replace3 = format!("{}: $1", filename);
-                                    let results = regex3.replace_all(&r2, replace3);
-                                    println!("{}", results);
-                                } else {
-                                    println!("not match para: {}", &pattern1);
-                                }
+                                */
+                                //println!("pattern3: {}", &pattern3);
+                                //if regex1.is_match(&para).is_ok() {
+                                let r1 = regex1.replace_all(&para, replace1); 
+                                println!("r1:\n {}", &r1);
+                                let r2 = regex2.replace_all(&r1, "");
+                                println!("r2:\n {}", &r2);
+                                let replace3 = format!("{}: $1", filename);
+                                let results = regex3.replace_all(&r2, replace3);
+                                println!("{}", results);
+                                //} else {
+                                //    println!("not match para: {}", &pattern1);
+                                //}
                             }
                         }
                     }
