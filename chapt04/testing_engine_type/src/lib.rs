@@ -1,6 +1,6 @@
 use clap::{App, Arg};
-//use regex::{Regex, RegexBuilder};
-use fancy_regex::Regex;
+use regex::{Regex, RegexBuilder};
+//use fancy_regex::Regex;
 //use lazy_regex::{Regex, RegexBuilder};
 use std::{
     error::Error,
@@ -145,7 +145,7 @@ pub fn run(config: Config) -> MyResult<()> {
                                     break;
                                 }
                                 // don't success
-                                let pattern1 = r"(?iu)\b([a-z]+)((?:\s|<[^>]+>)+)(\1\b)".to_string();
+                                let pattern1 = r"X(.+)+X".to_string();//r"(?m)nfa|nfa not".to_string();
                                 //let pattern1 = "(?iu)\\b([a-z]+)((?:\\s|<[^>]+>)+)(\\1\\b)".to_string();
                                 println!("pattern1: {}", &pattern1);
                                 let regex1 = Regex::new(&pattern1).unwrap();
@@ -155,61 +155,15 @@ pub fn run(config: Config) -> MyResult<()> {
                                     .build()
                                     .unwrap();
                                 */
-                                let replace1 = r"\e[7m$1\e[m$2\e[7m$3\e[m".to_string();
-                                //let replace1 = "\\e[7m$1\\e[m$2\\e[7m$3\\e[m".to_string();
-                                println!("replace1: {}", &replace1);
-                                // syntax error "\e"
-                                let pattern2 = r"(?mu)^(?:[^\\p{e}]*\n)+".to_string();
-                                println!("pattern2: {}", &pattern2);
-                                let regex2 = Regex::new(&pattern2).unwrap();
-                                //println!("pattern2: {}", &pattern2);
-                                /*
-                                let regex2 = RegexBuilder::new(&pattern2)
-                                    .multi_line(true)
-                                    .build()
-                                    .unwrap();
-                                    //.map_err(|_| format!("Invalid pattern \"{}\"", &pattern2))?;
-                                */
-                                let pattern3 = r"(?mu)^([^\n]+)".to_string(); 
-                                //let pattern3 = "(?mu)^([^\\n]+)".to_string(); 
-                                println!("pattern3: {}", &pattern3);
-                                let regex3 = Regex::new(&pattern3).unwrap();
-                                /*
-                                let regex3 = RegexBuilder::new(&pattern3)
-                                    .multi_line(true)
-                                    .build()
-                                    .unwrap();
-                                    //.map_err(|_| format!("Invalid pattern \"{}\"", &pattern3))?;
-                                */
-                                let r1 = regex1.replace_all(&para, replace1).to_string(); 
-                                println!("r1:\n {}\n", &r1);
-                                /*
-                                if regex2.is_match(&para).is_ok() {
-                                    println!("match \\e in para");
+                                if regex1.is_match(&para) {
+                                    println!("match: {}", &para);
                                 } else {
-                                    println!("doesn't match \\e in para");
+                                    println!("no match: {}", &para);
                                 }
-                                println!("para: {}", &para);
-                                */
-                                let r2 = regex2.replace_all(&r1, "").to_string();
-                                println!("r2:\n {}\n", &r2);
-                                let replace3 = format!("{}: $1", filename);
-                                let results = regex3.replace_all(&r2, replace3).to_string();
-                                println!("result:\n {}\n", &results);
+
                             }
                         }
                     }
-                    /*
-                    match find_para(
-                        file,
-                        &filename
-                    ) {
-                        Err(e) => eprintln!("{}", e),
-                        Ok(matches) => {
-                            println!("{}", matches);
-                        }
-                    }
-                    */
                 }
             },
         }
