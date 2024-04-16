@@ -76,11 +76,27 @@ In essence, each subexpression of a regex in a regex-directed match is checked i
 
 ### DFA Engine: Text-Directed
 
+I call this "text-directed" matching because each character scanned from the text controls the engine.
+
 ### First Thoughts: NFA and DFA in Comparison
+
+The two basic technologies behind regular-expression engines have the somewhat imposing names *Nondeterministic Finite Automaton* (NFA) and *Deterministic Finite Automaton* (DFA).
 
 #### Consequences to us as users
 
+Because of the regex-directed nature of an NFA, the details of how the engine attempts a match are very important.
+It's the exact opposite with a DFA -- since the engine keeps track of all matches simultaneously, none of these differences in representation matter so long as in the end they all represent the same set of possible matches.
+Three things come to my mind when describing a DFA engine:
+
+- DFA matching is very fast.
+- DFA matching is very consistent.
+- Talking about DFA matching is very boring.
+
+
 ## Backtracking
+
+The essence of an NFA engine is this: it considers each subexpression or component in turn, and whenever it needs to decide between two equally viable options, it selects one and remembers the other to return to later if need be.
+
 
 ### A Really Crummy Analogy
 
@@ -88,7 +104,17 @@ In essence, each subexpression of a regex in a regex-directed match is checked i
 
 ### Two Important Points on Backtracking
 
+In situations where the decision is between "make an attempt" and "skip an attempt," as with items governed by quantifiers, the engine always chooses to first *make* the attempt for *greedy*[^1] quantifiers, and to first *skip* the attempt for *lazy*(non-greedy)[^2] ones.
+
+The most recently saved option is the one returned to when a local failure forces backtracking. They're used LIFO (last in first out).
+
+[^1]: For every position in the string. Try to match the pattern at that position. If there's no match, go to the next position.
+[^2]: The lazy mode of quantifiers is an opposite to the greedy mode. It means: "repeat minimal number of times".
+
+
 ### Saved States
+
+In NFA regular expression nomenclature, the piles of bread crumbs are known as saved *states*. A state indicates where matching can restart from, if need be. It reflects both the position in the regex and the point in the string where an untried option begins.
 
 #### A match without backtracking
 
@@ -100,11 +126,17 @@ In essence, each subexpression of a regex in a regex-directed match is checked i
 
 ### Backtracking and Greediness
 
+
 #### Star,plus,and their backtracking
 
 #### Revisiting a fuller example
 
+A few observations: first, backtracking entails not only recalculating our position within the regex and the text, but also maintaining the status of the text being matched by the subexpression with parentheses.
+
+One final observation that may already be clear to you: something governed by star (or any of the greedy quantifiers) first matches as much as it can *without regard to what might follow in the regex*.
+
 ## More About Greediness and Backtracking
+
 
 ### Problems of Greediness
 
