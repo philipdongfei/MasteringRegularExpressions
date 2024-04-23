@@ -142,15 +142,42 @@ One final observation that may already be clear to you: something governed by st
 
 ### Multi-Character "Quotes"
 
+
 ### Using Lazy Quantifiers
+
+grep -oP '<B>((?!<B>).)*?</B>' test.txt
+grep -oP '<B>((?! </?B>).)*</B>' test.txt
 
 ### Greediness and Laziness Always Favor a Match
 
+$price =~ s/(\.\d\d[1-9]?)\d*/$1/;
+
+I then noted:
+    Anything matched so far is what we want to *keep*, so we wrap it in parentheses to capture to $1. We can then use $1 in the replacement string. If this is the only thing that matches, we replace exactly what was matched with itself--not very useful. However, we go on to match other items outside the $1 parentheses. They don't find their way to the replacement string, so the effect is that they're removed. In this case, the "to be removed" text is any extra digits, the `\d*` at the end of the regex.
+
+Well, we know how to write "at least one digit"! Simply replace `\d*` with `\d+`:
+
+$price =~ s/(\.\d\d[1-9]?)\d+/$1/;
+
+
 ### The Essence of Greediness,Laziness,and Backtracking
+
+Whether greedily or lazily, *every possible path is tested before the engine admits failure*.
+
+The order that the paths are tested is different between greedy and lazy quantifiers (after all, that's the whole point of having the two!), but in the end, if no match is to be found, it's known only after testing every possible path.
+
+
+grep -oP '".*"' test1.txt # with the greedy star, selects the longest one
+grep -oP '".*?"' test1.txt # with the lazy star, selects the shortest
 
 ### Possessive Quantifiers and Atomic Grouping
 
 #### Atomic grouping with (?>...)
+
+In essence, matching within `(?>...)` carries on normally, but if and when matching is able to exit the construct (that is, get past its closing parenthesis), all states that had been saved while within it are thrown away. In practice, this means that once the atomic grouping has been exited, whatever text was matched within it is now one unchangeable unit, to be kept or given back only as a whole. All saved states representing untried options within the parentheses are
+eliminated, so backtracking can never undo any of the decisions made within (at least not once they're "locked in" when the construct is exited).
+
+$price =~ s/(\.\d\d(?>[1-9]?))\d+/$1/;
 
 ##### The essence of atomic grouping
 

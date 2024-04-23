@@ -145,7 +145,9 @@ pub fn run(config: Config) -> MyResult<()> {
                                     break;
                                 }
                                 // don't success
-                                let pattern1 = r"X(.+)+X".to_string();//r"(?m)nfa|nfa not".to_string();
+                                //let pattern1 = r"X(.+)+X".to_string();//r"(?m)nfa|nfa not".to_string();
+                                //let pattern1 = r#""[^"]*""#.to_string();
+                                let pattern1 = r#"<B>((?!<B>).)*?</B>"#.to_string();
                                 //let pattern1 = "(?iu)\\b([a-z]+)((?:\\s|<[^>]+>)+)(\\1\\b)".to_string();
                                 println!("pattern1: {}", &pattern1);
                                 let regex1 = Regex::new(&pattern1).unwrap();
@@ -157,6 +159,10 @@ pub fn run(config: Config) -> MyResult<()> {
                                 */
                                 if regex1.is_match(&para) {
                                     println!("match: {}", &para);
+                                    let caps = regex1.captures(&para).unwrap();
+                                    caps.iter().enumerate().for_each(|(i,c)| {
+                                        println!("Item {} = {:?}", i, c);
+                                    })
                                 } else {
                                     println!("no match: {}", &para);
                                 }
