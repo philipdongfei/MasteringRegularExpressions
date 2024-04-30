@@ -181,6 +181,17 @@ $price =~ s/(\.\d\d(?>[1-9]?))\d+/$1/;
 
 ##### The essence of atomic grouping
 
+Atomic grouping, on the other hand, is fundamentally different because it actually *eliminates possible paths*. Eliminating states can have a number of different consequences, depending on the situation:
+
+- **No Effect** If a match is reached before one of the eliminated states would have been called upon, there is no effect on the match.
+- **Prohibit Match** The elimination of states can mean that a match that would have otherwise been possible now becomes impossible.
+- **Different Match** In some cases, it's possible to get a *different* match due to the elimination of states.
+- **Faster Failure** It's possible for the elimination of states to do nothing more than allow the regex engine, when no match is to be found, report that fact more quickly.
+
+** Some states may remain.**
+** Faster failures with atomic grouping.**
+
+
 ###### Some states may remain
 
 ###### Faster failures with atomic grouping
@@ -189,7 +200,10 @@ $price =~ s/(\.\d\d(?>[1-9]?))\d+/$1/;
 
 #### The Backtracking of Lookaround
 
+
 ##### Mimicking atomic grouping with positive lookahead
+
+
 
 #### Is Alternation Greedy?
 
