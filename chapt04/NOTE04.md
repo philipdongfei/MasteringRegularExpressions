@@ -207,9 +207,22 @@ Atomic grouping, on the other hand, is fundamentally different because it actual
 
 #### Is Alternation Greedy?
 
+Let's look at the Traditional NFA engine used in Perl, PHP, Java, .NET languages, and many others. When faced with alternation, each alternative is checked in the left-to-right order given in the expression.
+
+`^(Subject|Date):`
+
+*This is just another case of the regex engine backtracking to a point where untried options are still available.* This continues until an overall match is achieved, or until all options (in this case, all alternatives) are exhausted.
+
 #### Taking Advantage of Ordered Alternation
 
 ##### Ordered alternation pitfalls
+
+Consider matching a January date of the form 'Jan 31'.
+
+`Jan ([12][0-9]|3[01]|0?[1-9])`
+`Jan (31|[123]0|[012]?[1-9])`
+`Jan (0[1-9]|[12][0-9]?|3[01]?|[4-9])`
+
 
 ##### A Few Ways to Slice and Dice a Date
 
@@ -217,9 +230,14 @@ Atomic grouping, on the other hand, is fundamentally different because it actual
 
 ### "The Longest-Leftmost"
 
+when the transmission starts a DFA engine from some particular point in the string, and there exists a match or matches to be found at that position, the DFA finds the longest possible match, period. Since it's the longest from among all possible matches that start equally furthest to the left, it's the "longest-leftmost" match.
+
 #### Really,the longest
 
 ### POSIX and the Longest-Leftmost Rule
+
+The POSIX standard requires that if you have multiple possible matches that start at the same position, the one matching the most text must be the one returned.
+
 
 ### Speed and Efficiency
 
