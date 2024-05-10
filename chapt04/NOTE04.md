@@ -243,22 +243,60 @@ The POSIX standard requires that if you have multiple possible matches that star
 
 #### DFA efficiency
 
+The work done when a regex is first seen (the once-per-regex overhead) is called *compiling the regex*.
+
 #### NFA: Theory Versus Reality
 
 ### Summary: NFA and DFA in Comparison
 
+
 #### DFA versus NFA: Differences in the pre-use compile
+
+An NFA compile is generally faster, and requires less memory.
 
 #### DFA versus NFA: Differences in match speed
 
+A DFA's match speed is generally unrelated to the particular regex, but an NFA's is directly related.
+
+The need for optimizations is less pressing with a DFA since its matching is so fast to begin with, but for the most part, the extra work done during the DFA's pre-use compile affords better optimizations than most NFA engines take the trouble to do.
+
+Modern DFA engines often try to reduce the time and memory used during the compile by postponing some work until a match is attempted. Often, much of the compile-time work goes unused because of the nature of the text actually checked. A fair amount of time and memory can sometimes be saved by postponing the work until it's actually needed during the match. (The technobabble term for this is *lazy evaluation*.) It does, however, create cases where there can be a relationship among the
+regex, the text being checked, and the match speed.
+
+
 #### DFA versus NFA: Differences in what is matched
 
+A DFA (or anything POSIX) finds the longest leftmost match. A Traditional NFA might also, or it might find something else.
+
 #### DFA versus NFA: Differences in capabilities
+
+An NFA engine can support many things that a DFA cannot.
+
+- Capturing text matched by a parenthesized subexpression.
+- Lookaround, and other complex zero-width assertions.
+- Non-greedy quantifiers and ordered alternation.
+- Possessive quantifiers and atomic grouping.
 
 #### DFA Speed with NFA Capabilities: Regex Nirvana?
 
 #### DFA versus NFA: Differences in ease of implementation
 
 ## Summary
+
+Combine the two technologies with the POSIX standard, and for practical purposes, there are three types of engines:
+> - Traditional NFA     (gas-guzzling, power-on-demand)
+> - POSIX NFA           (gas-guzzling, standard-compilant)
+> - DFA (POSIX or not)  (electric, steady-as-she-goes)
+
+One overriding rule regardless of engine type: matches starting sooner take precedence over matches starting later.
+
+For the match attempt starting at any given spot:
+> #### DFA Text-Directed Engines
+> Find the longest possible match, period. That's it. End of discussion. Consistent, very fast, and boring to talk about.
+
+> #### NFA Regex-Directed Engines
+> Must "work through" a match. The soul of NFA matching is *backtracking*. The metacharaacters control the match: the standard quantifiers (star and friends) are *greedy*, while others may be lazy or possessive. Alternation is ordered in a traditional NFA, but greedy with a POSIX NFA.
+> **POSIX NFA** Must find the longest match, period. But, it's not boring, as you must worry about efficiency.
+> **Traditional NFA** Is the most expressive type of regex engine, since you can use the regex-directed nature of the engine to craft exactly the match you want.
 
 
