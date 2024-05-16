@@ -1,0 +1,10 @@
+SRC=array.c builtin.c eval.c field.c gawkmisc.c io.c main.c \
+    missing.c msg.c node.c re.c version.c
+The problem is that the first '.*' matches past the backslash, pulling it out from under the '(\\\n.*)*' that we want it to be matched by.
+1.2.3.4
+001.002.003.004
+and then.....?
+1234.5678.9101112.131415
+ip=72123.3.21.993
+ip=123.3.21.223
+/usr/local/bin/gcc

@@ -15,7 +15,7 @@ while ($line = <>) {
     #if ($line =~ s/(?<=\bJeff)(?=s\b)/'/g) {
     #    print "\'(?<=\\bJeff)(?=s\\b)\': $line";
     #}
-    if ($line =~ s/(?=s\b)(?<=\bJeff)/'/g) {
+    if ($line =~ m/(?=s\b)(?<=\bJeff)/'/g) {
         print "\'(?=s\\b)(?<=\\bJeff)\': $line";
     }
 }
