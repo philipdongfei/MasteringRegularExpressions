@@ -28,6 +28,17 @@ Writing a good regex involves striking a balance among several concerns:
 
 ### Matching Balanced Sets of Parentheses
 
+To match the parenthesized expression part, you might consider the following regular expressions, among others:
+
+1. \(.*\)       literal parentheses with anything in between
+2. \([^)]*\)    from an opening parenthesis to the next closing parenthesis
+3. \([^()]*\)   from an opening parenthesis to the next closing
+                parenthesis, but no other opening parentheses allowed in
+                between
+
+
+The real problem is that on the vast majority of systems, *you simply can't match arbitrarily nested constructs with regular expressions*.
+
 ### Watching Out for Unwanted Matches
 
 ### Matching Delimited Text
