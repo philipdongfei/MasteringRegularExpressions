@@ -38,9 +38,14 @@ To match the parenthesized expression part, you might consider the following reg
 
 
 The real problem is that on the vast majority of systems, *you simply can't match arbitrarily nested constructs with regular expressions*.
+But, even without these special constructs, you can still build a regex to match things nested to *a certain depth*, but not to an *arbitrary level* of nesting.
+
+But, here's a little Perl snippet that, given a **$depth**, creates a regex to match up to that many levels of parentheses beyond the first. It uses Perl's "*string x count*" operator, which replicates *string* by *count* times:
+`$regex = '\(' . '(?:[^()]|\(' x $depth . '[^()]*' . '\))*' x $depth . '\)';`
 
 ### Watching Out for Unwanted Matches
 
+`^-?([0-9]+(\.[0-9]*)?|\.[0-9]+)$`
 ### Matching Delimited Text
 
 #### Allowing escaped quotes in double-quoted strings

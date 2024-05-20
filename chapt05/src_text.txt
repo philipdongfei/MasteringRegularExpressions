@@ -5,6 +5,9 @@ The problem is that the first '.*' matches past the backslash, pulling it out fr
 001.002.003.004
 and then.....?
 1234.5678.9101112.131415
+.007
+-1.0092
 ip=72123.3.21.993
 ip=123.3.21.223
 /usr/local/bin/gcc
+\([^()]*(\([^()]*\)[^()]*)*\)
