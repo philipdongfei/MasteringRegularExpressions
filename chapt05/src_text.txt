@@ -11,3 +11,14 @@ ip=72123.3.21.993
 ip=123.3.21.223
 /usr/local/bin/gcc
 \([^()]*(\([^()]*\)[^()]*)*\)
+this has no number
+nothing here
+
+num 123
+if (o == 0) /* error */
+a <I>super exciting</I> offer!
+alias jeff jfriedl@regex.info
+a passport needs a "2\"x3\" likeness" of the holder.
+Darth Symbol: "/-|-\\" or "[^-^]"
+"You need a 2\"x3\" Phone.
+
