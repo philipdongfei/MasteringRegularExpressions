@@ -21,4 +21,6 @@ alias jeff jfriedl@regex.info
 a passport needs a "2\"x3\" likeness" of the holder.
 Darth Symbol: "/-|-\\" or "[^-^]"
 "You need a 2\"x3\" Phone.
+<input name=dir value=">">
+<a href="http://www.oreilly.com">O'Reilly Media</a>
 

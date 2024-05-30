@@ -95,7 +95,24 @@ By far the best all-around solution is the simple use of two substitutions:
 
 ### Matching an HTML Tag
 
+`<("[^"]*"|'[^']*'|[^'">])*>`
+`
+<               #   Opening "<"    
+(               #       Any amount of ... 
+    "[^"]*"     #         double-quoted string,
+    |           #         or ...
+    '[^']*'     #         stingle-quoted string,
+    |           #         or ...
+    [^'">]      #         "other stuff"
+)*              #
+>               #   Closing
+`
+
+
+
 ### Matching an HTML Link
+
+
 
 ### Examining an HTTP URL 
 
